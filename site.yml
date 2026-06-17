@@ -1,0 +1,41 @@
+---
+# Auteur : RAVEENDRAKUMAR ARUSAN
+# Playbook : Installation de Nginx + Déploiement d'une page web
+# Système : Amazon Linux 2
+
+- name: Installer Nginx et déployer un site web
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Activer nginx1 via amazon-linux-extras
+      command: amazon-linux-extras install nginx1 -y
+      args:
+        warn: false
+
+    - name: Installer Nginx (au cas où)
+      yum:
+        name: nginx
+        state: present
+
+    - name: Activer et démarrer Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Déployer la page web
+      copy:
+        dest: /usr/share/nginx/html/index.html
+        content: |
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>Site Ansible</title>
+          </head>
+          <body>
+          <h1>Bienvenue sur mon site web déployé avec Ansible !</h1>
+          <p>Amazon Linux 2 + Ansible + Nginx = ❤️</p>
+          <p>Auteur : RAVEENDRAKUMAR ARUSAN</p>
+          </body>
+          </html>
